@@ -3,7 +3,8 @@
 # General
 environment            = "prod"
 location               = "East US"
-resource_group_name    = "prod-resource-group"
+sentinel_resource_group_name    = "prod-resource-group"
+DCR_resource_group_name    = "prod-resource-group1"
 
 # Sentinel module inputs
 sentinel_workspace_name = "prod-sentinel-workspace"
