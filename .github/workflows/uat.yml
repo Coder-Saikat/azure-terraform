@@ -1,0 +1,31 @@
+name: UAT Deployment
+
+on:
+  push:
+    branches:
+      - uat
+
+jobs:
+  deploy-uat:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: 1.7.5
+
+      - name: Terraform Init
+        working-directory: infra/envs/uat
+        run: terraform init
+
+      - name: Terraform Plan
+        working-directory: infra/envs/uat
+        run: terraform plan -var-file="terraform.tfvars"
+
+      - name: Terraform Apply
+        working-directory: infra/envs/uat
+        run: terraform apply -auto-approve -var-file="terraform.tfvars"
