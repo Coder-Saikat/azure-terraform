@@ -15,7 +15,7 @@ jobs:
 
     defaults:
       run:
-        working-directory: azure-terraform/envs/prod  # Avoid repeating it in every step
+        working-directory: envs/prod  # Avoid repeating it in every step
 
     steps:
       - name: Checkout code

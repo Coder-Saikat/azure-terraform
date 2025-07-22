@@ -15,7 +15,7 @@ jobs:
 
     defaults:
       run:
-        working-directory: azure-terraform/envs/uat
+        working-directory: envs/uat
 
     steps:
       - name: Checkout code
