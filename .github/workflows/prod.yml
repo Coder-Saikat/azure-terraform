@@ -12,7 +12,11 @@ jobs:
     environment:
       name: prod
       url: https://portal.azure.com/
-    
+
+    defaults:
+      run:
+        working-directory: azure-terraform/envs/prod  # Avoid repeating it in every step
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -22,14 +26,19 @@ jobs:
         with:
           terraform_version: 1.7.5
 
+      - name: Login to Azure
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
       - name: Terraform Init
-        working-directory: infra/envs/prod
         run: terraform init
 
+      - name: Terraform Validate
+        run: terraform validate
+
       - name: Terraform Plan
-        working-directory: infra/envs/prod
         run: terraform plan -var-file="terraform.tfvars"
 
       - name: Terraform Apply
-        working-directory: infra/envs/prod
         run: terraform apply -auto-approve -var-file="terraform.tfvars"

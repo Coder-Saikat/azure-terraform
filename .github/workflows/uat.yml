@@ -7,7 +7,15 @@ on:
 
 jobs:
   deploy-uat:
+    if: github.event_name == 'push'
     runs-on: ubuntu-latest
+    environment:
+      name: uat
+      url: https://portal.azure.com/
+
+    defaults:
+      run:
+        working-directory: azure-terraform/envs/uat
 
     steps:
       - name: Checkout code
@@ -18,14 +26,19 @@ jobs:
         with:
           terraform_version: 1.7.5
 
+      - name: Login to Azure
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
       - name: Terraform Init
-        working-directory: infra/envs/uat
         run: terraform init
 
+      - name: Terraform Validate
+        run: terraform validate
+
       - name: Terraform Plan
-        working-directory: infra/envs/uat
         run: terraform plan -var-file="terraform.tfvars"
 
       - name: Terraform Apply
-        working-directory: infra/envs/uat
         run: terraform apply -auto-approve -var-file="terraform.tfvars"
